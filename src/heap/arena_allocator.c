@@ -2,7 +2,7 @@
 #include <stddef.h>
 #include <sys/mman.h>
 
-arena_t *init(size_t size) {
+arena_t *arena_init(size_t size) {
   // The arena will be placed at the beginning of the mapped memory
   size_t total_size = sizeof(arena_t) + size;
 
@@ -32,26 +32,24 @@ arena_t *init(size_t size) {
   return arena;
 }
 
-void *alloc(arena_t *arena, size_t size) {
-  // TODO: allocate size using arena memory+used as a ref point
+void *arena_alloc(arena_t *arena, size_t size) {
   // Make sure we don't overflow the arena
   if (arena->used + size > arena->size) {
     return NULL;
   }
-
+  // memory+used provides the next available space
   void *next_free_addr = arena->memory + arena->used;
   arena->used += size;
   return next_free_addr;
 }
 
-void reset(arena_t *arena) {
+void arena_reset(arena_t *arena) {
   // Reset the arena by simply setting setting used to 0
   // Further allocations with overwrite previously allocated memory
   arena->used = 0;
 }
 
-int destroy(arena_t *arena) {
-  // TODO: return all memory to the OS using munmap
+int arena_destroy(arena_t *arena) {
   // munmap returns 0 upon success, -1 otherwise
   return munmap(arena->memory, arena->size);
 }
