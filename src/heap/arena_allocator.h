@@ -10,15 +10,15 @@ typedef struct arena {
 } arena_t;
 
 // Initialize the arena with memory reserved from the OS
-arena_t* init(size_t size);
+arena_t *init(size_t size);
 
 // Allocate memory from the arena
-void* alloc(arena_t* arena, size_t size);
+void *alloc(arena_t *arena, size_t size);
 
 // Resets the arena allocator and frees all allocated memory
-void reset(arena_t* arena);
+void reset(arena_t *arena);
 
 // Destroy the arena and give the memory back to the OS
-void destroy(arena_t* arena);
+int destroy(arena_t *arena);
 
 #endif
