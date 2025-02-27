@@ -16,7 +16,7 @@ arena_t *arena_init(size_t size);
 void *arena_alloc(arena_t *arena, size_t size);
 
 // Resets the arena allocator and frees all allocated memory
-void arena_reset(arena_t *arena);
+void arena_free(arena_t *arena);
 
 // Destroy the arena and give the memory back to the OS
 int arena_destroy(arena_t *arena);

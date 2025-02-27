@@ -28,7 +28,7 @@ void test_allocate_and_overflow() {
 
   arena_t *arena = arena_init(2 * sizeof(int));
 
-  int *alloc1 = arena_alloc(arena, sizeof(int));
+  void *alloc1 = arena_alloc(arena, sizeof(int));
 
   if (arena->used != sizeof(int)) {
     printf("test_allocate_and_overflow: Arena failed the first allocation\n");
@@ -64,7 +64,7 @@ void test_reset() {
     return;
   }
 
-  arena_reset(arena);
+  arena_free(arena);
 
   if (arena->used != 0) {
     printf("test_reset: Arena did not reset used memory\n");
@@ -74,10 +74,31 @@ void test_reset() {
   printf("test_reset: Passed\n");
 }
 
+// Arena memory should be zeroed upon allocation
+void test_arena_mem_zeroed() {
+
+  arena_t *arena = arena_init(sizeof(int));
+
+  int *ptr = (int *)arena_alloc(arena, sizeof(int));
+  *ptr = 1;
+
+  arena_free(arena);
+
+  int *ptr2 = (int *)arena_alloc(arena, sizeof(int));
+
+  if (*ptr2 == 1) {
+    printf("test_arena_mem_zeroed: Arena did not zero previously allocated "
+           "memory\n");
+    return;
+  }
+  printf("test_arena_mem_zeroed: Passed\n");
+}
+
 int main() {
 
   test_arena_init();
   test_allocate_and_overflow();
   test_reset();
+  test_arena_mem_zeroed();
   return 0;
 }
