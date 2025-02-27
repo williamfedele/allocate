@@ -13,7 +13,7 @@ typedef struct arena {
 arena_t *arena_init(size_t size);
 
 // Allocate memory from the arena
-void *arena_alloc(arena_t *arena, size_t size);
+void *arena_alloc(arena_t *arena, size_t size, size_t alignment);
 
 // Resets the arena allocator and frees all allocated memory
 void arena_free(arena_t *arena);
