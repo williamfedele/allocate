@@ -28,7 +28,7 @@ arena_t *arena_init(size_t size) {
   // Cast as char* for 1 byte offset increments
   arena->memory = (char *)region + sizeof(arena_t);
   arena->size = size;
-  arena->used = 0;
+  arena->offset = 0;
 
   return arena;
 }
@@ -41,7 +41,7 @@ void *arena_alloc(arena_t *arena, size_t size, size_t alignment) {
   }
 
   // Align the next addr with the alignment boundary provided
-  size_t aligned_used = (arena->used + alignment - 1) & ~(alignment - 1);
+  size_t aligned_used = (arena->offset + alignment - 1) & ~(alignment - 1);
 
   // Make sure we don't overflow the arena
   if (aligned_used + size > arena->size) {
@@ -50,7 +50,7 @@ void *arena_alloc(arena_t *arena, size_t size, size_t alignment) {
 
   // memory+used provides the next available space
   void *next_free_addr = arena->memory + aligned_used;
-  arena->used = aligned_used + size;
+  arena->offset = aligned_used + size;
 
   memset(next_free_addr, 0, size);
 
@@ -60,7 +60,7 @@ void *arena_alloc(arena_t *arena, size_t size, size_t alignment) {
 void arena_free(arena_t *arena) {
   // Reset the arena by simply setting setting used to 0
   // Further allocations with overwrite previously allocated memory
-  arena->used = 0;
+  arena->offset = 0;
 }
 
 int arena_destroy(arena_t *arena) {

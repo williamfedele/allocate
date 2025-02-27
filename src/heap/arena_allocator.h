@@ -4,9 +4,9 @@
 #include <stddef.h>
 
 typedef struct arena {
-  void *memory; // Start of mem region
-  size_t size;  // Total arena size
-  size_t used;  // Bytes currently allocated
+  void *memory;  // Start of mem region
+  size_t size;   // Total arena size
+  size_t offset; // Bytes currently allocated
 } arena_t;
 
 // Initialize the arena with memory reserved from the OS

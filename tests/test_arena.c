@@ -20,7 +20,7 @@ void test_arena_init() {
     return;
   }
 
-  if (arena->used != 0) {
+  if (arena->offset != 0) {
     printf("error: new arena should not have used memory\n");
     return;
   }
@@ -38,14 +38,14 @@ void test_allocate_and_overflow() {
 
   void *alloc1 = arena_alloc(arena, sizeof(int), alignof(int));
 
-  if (arena->used != sizeof(int)) {
+  if (arena->offset != sizeof(int)) {
     printf("error: arena failed the first allocation\n");
     return;
   }
 
   void *alloc2 = arena_alloc(arena, sizeof(int), alignof(int));
 
-  if (arena->used != 2 * sizeof(int)) {
+  if (arena->offset != 2 * sizeof(int)) {
     printf("error: arena failed the second allocation\n");
     return;
   }
@@ -70,14 +70,14 @@ void test_free() {
 
   void *ptr = arena_alloc(arena, sizeof(int), alignof(int));
 
-  if (arena->used != sizeof(int)) {
+  if (arena->offset != sizeof(int)) {
     printf("error: arena allocation failed\n");
     return;
   }
 
   arena_free(arena);
 
-  if (arena->used != 0) {
+  if (arena->offset != 0) {
     printf("error: arena did not reset used memory\n");
     return;
   }
@@ -120,7 +120,7 @@ void test_arena_alignment() {
 
   void *ptr1 = arena_alloc(arena, sizeof(char), alignof(char));
 
-  if (arena->used != sizeof(char)) {
+  if (arena->offset != sizeof(char)) {
     printf("error: arena failed the first allocation\n");
     return;
   }
@@ -128,7 +128,7 @@ void test_arena_alignment() {
   void *ptr2 = arena_alloc(arena, sizeof(int), alignof(int));
 
   // Arena used space should be the whole 8 byte mapping due to alignment
-  if (arena->used != 2 * sizeof(int)) {
+  if (arena->offset != 2 * sizeof(int)) {
     printf("error: arena did not align correctly\n");
     return;
   }
