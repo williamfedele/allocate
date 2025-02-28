@@ -41,16 +41,16 @@ void *arena_alloc(arena_t *arena, size_t size, size_t alignment) {
   }
 
   // Align the next addr with the alignment boundary provided
-  size_t aligned_used = (arena->offset + alignment - 1) & ~(alignment - 1);
+  size_t aligned_offset = (arena->offset + alignment - 1) & ~(alignment - 1);
 
   // Make sure we don't overflow the arena
-  if (aligned_used + size > arena->size) {
+  if (aligned_offset + size > arena->size) {
     return NULL;
   }
 
   // memory+used provides the next available space
-  void *next_free_addr = arena->memory + aligned_used;
-  arena->offset = aligned_used + size;
+  void *next_free_addr = arena->memory + aligned_offset;
+  arena->offset = aligned_offset + size;
 
   memset(next_free_addr, 0, size);
 
