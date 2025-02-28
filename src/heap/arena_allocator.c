@@ -65,5 +65,5 @@ void arena_free(arena_t *arena) {
 
 int arena_destroy(arena_t *arena) {
   // munmap returns 0 upon success, -1 otherwise
-  return munmap(arena->memory, arena->size);
+  return munmap(arena->memory, sizeof(arena_t) + arena->size);
 }
