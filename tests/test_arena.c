@@ -1,7 +1,7 @@
 #include <stdalign.h>
 #include <stdio.h>
 
-#include "../src/heap/arena_allocator.h"
+#include "../src/arena_allocator.h"
 
 // Ensures arenas can be created correctly
 void test_arena_init() {
